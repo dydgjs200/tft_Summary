@@ -2,11 +2,23 @@ const request = require("request");
 const urlencode = require("urlencode");
 const express = require("express");
 const app = express();
-const port = 3000;
 const dotenv = require("dotenv");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// swagger import
+const { swaggerUi, specs } = require("./Swagger/swagger");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+// env import
 dotenv.config();
 
+// routes import
+const userRoutes = require("./routes/user/index");
+app.use("/user", userRoutes);
+
+const port = process.env.PORT;
 const tagLine = process.env.TAGLINE;
 const gameName = encodeURIComponent(process.env.GAMENAME); //한글 아이디 encode 해서 주소값으로 변경
 const apiKey = process.env.API_KEY;

@@ -14,5 +14,9 @@
     "express": "^4.19.2",
     "request": "^2.88.2",
     "urlencode": "^2.0.0"
+  },
+  "devDependencies": {
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }
