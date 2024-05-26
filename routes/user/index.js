@@ -29,5 +29,6 @@ const controller = require("../../controllers/user");
  *                          ]
  */
 router.get("/", controller.getAllUsers);
+router.post("/:gameName", controller.getUserInfo);
 
 module.exports = router;
