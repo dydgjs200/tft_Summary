@@ -71,8 +71,6 @@ exports.getUserMatchHistory = async (req, res, next) => {
     const puuid = req.puuid;
     const region = req.region;
 
-    console.log("rank Info > ", rankInfo);
-
     // 해당 유저의 총 전적
     const totalGame = rankInfo.wins + rankInfo.losses;
 
@@ -88,6 +86,8 @@ exports.getUserMatchHistory = async (req, res, next) => {
     req.matchList = matchList.data;
     req.region = region;
     req.rankInfo = rankInfo;
+
+    console.log("rank Info > ", rankInfo);
 
     next(); //next to getUserMatchDetails
   } catch (err) {
@@ -108,6 +108,8 @@ exports.getUserMatchDetails = async (req, res) => {
 
     const matchDetailsUrl = `https://${region}.api.riotgames.com/tft/match/v1/matches/${matchList[0]}?api_key=${process.env.API_KEY}`;
     const matchDetail = await axios.get(matchDetailsUrl);
+    console.log("matchList > ", typeof matchList);
+    console.log("matchList > ", matchList);
 
     //console.log("queid >", matchDetail.data.info.queueId);
 
@@ -115,17 +117,17 @@ exports.getUserMatchDetails = async (req, res) => {
     const userData = {
       region: region,
       summonerId: summonerId,
-      //matchList: matchList, 얘를 넣을때 문제있음
+      matchList: matchList,
       puuid: puuid,
       gameName: gameName,
       tagLine: tagLine,
+      leaguePoints: rankInfo.leaguePoints,
       wins: rankInfo.wins,
       losses: rankInfo.losses,
       tier: rankInfo.tier,
       rank: rankInfo.rank,
     };
     const newUser = await userService.createUser(userData);
-    console.log("newUser > ", newUser);
 
     res.send(newUser);
   } catch (err) {}

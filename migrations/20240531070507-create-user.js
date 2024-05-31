@@ -15,7 +15,7 @@ module.exports = {
       tagLine: {
         type: Sequelize.STRING
       },
-      area: {
+      region: {
         type: Sequelize.STRING
       },
       puuid: {
@@ -46,7 +46,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       matchList: {
-        type: Sequelize.STRING
+        type: Sequelize.JSON
       },
       createdAt: {
         allowNull: false,
