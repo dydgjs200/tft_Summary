@@ -14,6 +14,14 @@ const createUser = async (userData) => {
   }
 };
 
+const matchDetails = async () => {
+  try {
+    
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports = {
   findgameName,
   createUser,
