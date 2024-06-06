@@ -42,12 +42,14 @@ exports.getUserInfo = async (req, res, next) => {
     const summonerUrl = `https://kr.api.riotgames.com/tft/summoner/v1/summoners/by-puuid/${puuid}?api_key=${process.env.API_KEY}`;
     const getSummonerId = await axios.get(summonerUrl);
     const summonerId = getSummonerId.data.id; // summonerId = id
+    const profileIconId = getSummonerId.data.profileIconId;
 
     // summonerId를 이용한 rank 찾기
     const rankUrl = `https://kr.api.riotgames.com/tft/league/v1/entries/by-summoner/${summonerId}?api_key=${process.env.API_KEY}`;
     const getRank = await axios.get(rankUrl);
     const rankInfo = getRank.data;
 
+    req.profileIconId = profileIconId;
     req.summonerId = summonerId;
     req.gameName = gameName;
     req.tagLine = tagLine;
@@ -64,6 +66,7 @@ exports.getUserInfo = async (req, res, next) => {
 
 exports.getUserMatchHistory = async (req, res, next) => {
   try {
+    const profileIconId = req.profileIconId;
     const summonerId = req.summonerId;
     const gameName = req.gameName;
     const tagLine = req.tagLine;
@@ -79,6 +82,7 @@ exports.getUserMatchHistory = async (req, res, next) => {
     //해당 유저의 모든 게임 리스트 반환
     const matchList = await axios.get(matchUrl);
 
+    req.profileIconId = profileIconId;
     req.summonerId = summonerId;
     req.gameName = gameName;
     req.tagLine = tagLine;
@@ -98,6 +102,7 @@ exports.getUserMatchHistory = async (req, res, next) => {
 
 exports.getUserMatchDetails = async (req, res) => {
   try {
+    const profileIconId = req.profileIconId;
     const summonerId = req.summonerId;
     const gameName = req.gameName;
     const tagLine = req.tagLine;
@@ -115,6 +120,7 @@ exports.getUserMatchDetails = async (req, res) => {
 
     // create DB
     const userData = {
+      profileIconId: profileIconId,
       region: region,
       summonerId: summonerId,
       matchList: matchList,
