@@ -3,11 +3,12 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("users", "accountId");
+    // 테이블 이름 변경 (users -> user)
     await queryInterface.renameTable("users", "user");
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.addColumn("user", "accountId", Sequelize.STRING);
+    // 롤백 시 테이블 이름 변경 (user -> users)
+    await queryInterface.renameTable("user", "users");
   },
 };
