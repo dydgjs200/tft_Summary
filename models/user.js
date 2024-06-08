@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,23 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
-    gameName: DataTypes.STRING,
-    tagLine: DataTypes.STRING,
-    region: DataTypes.STRING,
-    puuid: DataTypes.STRING,
-    summonerId: DataTypes.STRING,
-    accountId: DataTypes.STRING,
-    profileIconId: DataTypes.STRING,
-    tier: DataTypes.STRING,
-    rank: DataTypes.STRING,
-    leaguePoints: DataTypes.INTEGER,
-    wins: DataTypes.INTEGER,
-    losses: DataTypes.INTEGER,
-    matchList: DataTypes.JSON
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      gameName: DataTypes.STRING,
+      tagLine: DataTypes.STRING,
+      region: DataTypes.STRING,
+      puuid: DataTypes.STRING,
+      summonerId: DataTypes.STRING,
+      accountId: DataTypes.STRING,
+      profileIconId: DataTypes.STRING,
+      tier: DataTypes.STRING,
+      rank: DataTypes.STRING,
+      leaguePoints: DataTypes.INTEGER,
+      wins: DataTypes.INTEGER,
+      losses: DataTypes.INTEGER,
+      matchList: DataTypes.JSON,
+    },
+    {
+      sequelize,
+      modelName: "User",
+      tableName: "user", // 명시적으로 테이블 이름을 설정
+    },
+  );
   return User;
 };
