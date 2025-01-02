@@ -10,28 +10,30 @@ exports.getAllUsers = (req, res) => {
 
 // db에 유저가 있을 시 정보 리턴
 exports.findUser = async (req, res, next) => {
-  const gameName = encodeURIComponent(req.params.gameName);
-  const region = req.body.region;
-  const tagLine = req.body.tagLine;
+  try {
+    const gameName = decodeURIComponent(req.params.gameName);
+    const { region, tagLine } = req.body;
 
-  const User = await userService.findgameName(gameName);
+    const user = await userService.findgameName(gameName);
 
-  if (User) {
-    res.send(User);
-  } else {
+    if (user) {
+      return res.send(user); // 유저 정보 반환
+    }
+
+    // 유저가 없을 경우 다음 단계로 이동
     req.gameName = gameName;
     req.region = region;
     req.tagLine = tagLine;
-
-    next(); //next to getUserInfo
+    next();
+  } catch (err) {
+    console.error("findUser error:", err);
+    res.status(500).json({ message: "Server error while finding user." });
   }
 };
 
 exports.getUserInfo = async (req, res, next) => {
   try {
-    const gameName = encodeURIComponent(req.params.gameName);
-    const region = req.body.region;
-    const tagLine = req.body.tagLine;
+    const { gameName, region, tagLine } = req;
 
     // gameName + tagLine을 이용한 puuid
     const accountUrl = `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${gameName}/${tagLine}?api_key=${process.env.API_KEY}`;
@@ -66,75 +68,61 @@ exports.getUserInfo = async (req, res, next) => {
 
 exports.getUserMatchHistory = async (req, res, next) => {
   try {
-    const profileIconId = req.profileIconId;
-    const summonerId = req.summonerId;
-    const gameName = req.gameName;
-    const tagLine = req.tagLine;
-    const rankInfo = req.rankInfo;
-    const puuid = req.puuid;
-    const region = req.region;
+    const { puuid, region, rankInfo } = req;
+    const totalGames = rankInfo.wins + rankInfo.losses;
 
-    // 해당 유저의 총 전적
-    const totalGame = rankInfo.wins + rankInfo.losses;
+    const matchUrl = `https://${region}.api.riotgames.com/tft/match/v1/matches/by-puuid/${puuid}/ids?start=0&count=${totalGames}&api_key=${process.env.API_KEY}`;
+    const matchResponse = await axios.get(matchUrl);
 
-    const matchUrl = `https://${region}.api.riotgames.com/tft/match/v1/matches/by-puuid/${puuid}/ids?start=0&count=${totalGame}&api_key=${process.env.API_KEY}`;
-
-    //해당 유저의 모든 게임 리스트 반환
-    const matchList = await axios.get(matchUrl);
-
-    req.profileIconId = profileIconId;
-    req.summonerId = summonerId;
-    req.gameName = gameName;
-    req.tagLine = tagLine;
-    req.puuid = puuid;
-    req.matchList = matchList.data;
-    req.region = region;
-    req.rankInfo = rankInfo;
-
-    console.log("rank Info > ", rankInfo);
-
-    next(); //next to getUserMatchDetails
+    req.matchList = matchResponse.data;
+    next();
   } catch (err) {
-    console.log("error > ", err);
-    res.status(500).json({ message: "interval server error" });
+    console.error("getUserMatchHistory error:", err.message);
+    res.status(500).json({ message: "Failed to fetch match history." });
   }
 };
 
 exports.getUserMatchDetails = async (req, res) => {
   try {
-    const profileIconId = req.profileIconId;
-    const summonerId = req.summonerId;
-    const gameName = req.gameName;
-    const tagLine = req.tagLine;
-    const puuid = req.puuid;
-    const region = req.region;
-    const matchList = req.matchList; // 0번이 가장 최근게임(랭크, 일반 둘 다 포함)
-    const rankInfo = req.rankInfo;
+    const {
+      profileIconId,
+      summonerId,
+      gameName,
+      tagLine,
+      puuid,
+      region,
+      matchList,
+      rankInfo,
+    } = req;
+
+    if (!matchList || matchList.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No matches found for the user." });
+    }
 
     const matchDetailsUrl = `https://${region}.api.riotgames.com/tft/match/v1/matches/${matchList[0]}?api_key=${process.env.API_KEY}`;
-    const matchDetail = await axios.get(matchDetailsUrl);
-    console.log("matchList > ", typeof matchList);
-    console.log("matchList > ", matchList);
+    const matchDetailResponse = await axios.get(matchDetailsUrl);
 
-    //console.log("queid >", matchDetail.data.info.queueId);
-
-    // create DB
     const userData = {
-      profileIconId: profileIconId,
-      region: region,
-      summonerId: summonerId,
-      matchList: matchList,
-      puuid: puuid,
-      gameName: gameName,
-      tagLine: tagLine,
+      profileIconId,
+      region,
+      summonerId,
+      matchList,
+      puuid,
+      gameName: decodeURIComponent(gameName),
+      tagLine,
       leaguePoints: rankInfo.leaguePoints,
       wins: rankInfo.wins,
       losses: rankInfo.losses,
       tier: rankInfo.tier,
       rank: rankInfo.rank,
     };
-    const newUser = await userService.createUser(userData);
 
+    const newUser = await userService.createUser(userData);
     res.send(newUser);
-  } catch (err) {}
+  } catch (err) {
+    console.error("getUserMatchDetails error:", err.message);
+    res.status(500).json({ message: "Failed to fetch match details." });
+  }
 };
