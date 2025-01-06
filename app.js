@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // swagger import
 const { swaggerUi, specs } = require("./Swagger/swagger");
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(specs));
 
 // env import
 dotenv.config();
