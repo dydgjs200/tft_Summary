@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Design</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="form-container">
+      <select id="region" class="select-box">
+        <option value="">Select Region</option>
+        <option value="NA">NA</option>
+        <option value="EU">EU</option>
+        <option value="ASIA">ASIA</option>
+      </select>
+      <input id="tagline" type="text" class="input-box" placeholder="Tagline" />
+      <input
+        id="gameName"
+        type="text"
+        class="input-box"
+        placeholder="Game Name"
+        onkeydown="submitData(event)"
+      />
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
