@@ -6,7 +6,7 @@
     <title>Form Design</title>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <>
     <div class="form-container">
       <select id="region" class="select-box">
         <option value="">Select Region</option>
@@ -14,7 +14,7 @@
         <option value="EU">EU</option>
         <option value="ASIA">ASIA</option>
       </select>
-      <input id="tagline" type="text" class="input-box" placeholder="Tagline" />
+      <input id="tagLine" type="text" class="input-box" placeholder="Tagline" />
       <input
         id="gameName"
         type="text"
@@ -23,6 +23,8 @@
         onkeydown="submitData(event)"
       />
     </div>
+
+    <div id = "userInfo"></div>
     <script src="index.js"></script>
   </body>
 </html>
