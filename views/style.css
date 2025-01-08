@@ -9,6 +9,7 @@ body {
   background-color: #f4f4f4;
 }
 
+/* 메인 스타인 */
 .form-container {
   display: flex;
   gap: 10px;
