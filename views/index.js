@@ -1,4 +1,3 @@
-// submitData 함수
 function submitData(event) {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -17,6 +16,7 @@ function submitData(event) {
       tagLine: tagLine,
     };
 
+    // 서버로 데이터 전송
     fetch(`http://localhost:3000/user/${gameName}`, {
       method: "POST",
       headers: {
@@ -35,63 +35,11 @@ function submitData(event) {
         }
       })
       .then((data) => {
-        loadModal(data);
+        // /:gameName 경로로 리다이렉트
+        window.location.href = `/${gameName}`;
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-  }
-}
-
-function loadModal(data) {
-  // 기존에 추가된 모달이 있으면 제거
-  const existingModal = document.getElementById("modal");
-  if (existingModal) {
-    existingModal.remove();
-  }
-
-  fetch("userModal.html") // modal.html 파일을 가져옴
-    .then((response) => response.text())
-    .then((html) => {
-      // HTML 내용을 삽입
-      const modalContainer = document.createElement("div");
-      modalContainer.innerHTML = html;
-
-      // body에 모달 추가
-      document.body.appendChild(modalContainer);
-
-      // 동적으로 추가된 모달 컨텐츠를 채우기
-      const modalContent = modalContainer.querySelector("#modal-content");
-      modalContent.innerHTML = `
-        <div class="user-info">
-          <h3>Player Information</h3>
-          <p><strong>Game Name:</strong> ${data.gameName}</p>
-          <p><strong>Region:</strong> ${data.region}</p>
-          <p><strong>Tagline:</strong> ${data.tagLine}</p>
-          <p><strong>Tier:</strong> ${data.tier}</p>
-          <p><strong>Rank:</strong> ${data.rank}</p>
-          <p><strong>LP:</strong> ${data.leaguePoints}</p>
-        </div>
-      `;
-
-      // 모달 열기
-      openModal();
-    })
-    .catch((error) => {
-      console.error("Error loading modal:", error);
-    });
-}
-
-// 모달 열기
-function openModal() {
-  const modal = document.getElementById("modal");
-  modal.style.display = "flex";
-}
-
-// 모달 닫기
-function closeModal() {
-  const modal = document.getElementById("modal");
-  if (modal) {
-    modal.remove(); // 모달을 제거
   }
 }

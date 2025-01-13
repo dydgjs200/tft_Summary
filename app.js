@@ -5,7 +5,6 @@ const app = express();
 const dotenv = require("dotenv");
 const sequelize = require("./models/index");
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,7 +20,7 @@ const userRoutes = require("./routes/user/index");
 app.use("/user", userRoutes);
 
 // views import
-const path = require("path")
+const path = require("path");
 app.use(express.static(path.join(__dirname, "views")));
 
 const port = process.env.PORT;
@@ -31,4 +30,8 @@ app.listen(port, () => {
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
+});
+
+app.get("/:gameName", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "userInfo.html"));
 });
