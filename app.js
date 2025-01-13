@@ -27,11 +27,3 @@ const port = process.env.PORT;
 app.listen(port, () => {
   console.log("서버 실행");
 });
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-});
-
-app.get("/:gameName", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "userInfo.html"));
-});
