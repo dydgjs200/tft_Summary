@@ -10,6 +10,8 @@ exports.getAllUsers = (req, res) => {
 
 // db에 유저가 있을 시 정보 리턴
 exports.findUser = async (req, res, next) => {
+  console.log("Request Body:", req.body);
+
   try {
     const gameName = decodeURIComponent(req.params.gameName);
     const { region, tagLine } = req.body;
