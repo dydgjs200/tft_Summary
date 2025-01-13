@@ -50,4 +50,6 @@ router.post(
   controller.getUserMatchDetails,
 );
 
+router.post("/:gameName/:matchList")
+
 module.exports = router;

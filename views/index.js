@@ -43,7 +43,6 @@ function submitData(event) {
   }
 }
 
-// 모달 HTML 로드 및 데이터 표시
 function loadModal(data) {
   // 기존에 추가된 모달이 있으면 제거
   const existingModal = document.getElementById("modal");
@@ -72,10 +71,6 @@ function loadModal(data) {
           <p><strong>Tier:</strong> ${data.tier}</p>
           <p><strong>Rank:</strong> ${data.rank}</p>
           <p><strong>LP:</strong> ${data.leaguePoints}</p>
-          <div class="modal" id="modal">
-            <div class="modal-content" id="modal-content"></div>
-            <button class="close-btn" onclick="closeModal()">Close</button>
-          </div>
         </div>
       `;
 
