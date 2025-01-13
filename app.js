@@ -4,9 +4,13 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const sequelize = require("./models/index");
+const cors = require("cors");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// cors import
+app.use(cors());
 
 // swagger import
 const { swaggerUi, specs } = require("./Swagger/swagger");
@@ -25,5 +29,5 @@ app.use(express.static(path.join(__dirname, "views")));
 
 const port = process.env.PORT;
 app.listen(port, () => {
-  console.log("서버 실행");
+  console.log(`${port} 로 서버 실행`);
 });
