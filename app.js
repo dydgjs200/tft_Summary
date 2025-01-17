@@ -21,7 +21,9 @@ dotenv.config();
 
 // routes import
 const userRoutes = require("./routes/user/index");
+const traitRoutes = require("./routes/trait/index");
 app.use("/user", userRoutes);
+app.use("/trait", traitRoutes);
 
 // views import
 const path = require("path");
