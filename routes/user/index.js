@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const controller = require("../../controllers/user");
+const userInfo = require("../../controllers/user.js");
+const matchListInfo = require("../../controllers/matchList.js");
 
 /**
  * @swagger
@@ -41,13 +42,15 @@ const controller = require("../../controllers/user");
  *                            }
  *                          ]
  */
-//router.get("/", controller.getAllUsers);
+
 router.post(
   "/:gameName",
-  controller.findUser,
-  controller.getUserInfo,
-  controller.getUserMatchHistory,
-  controller.getUserMatchDetails,
+  userInfo.findUser,
+  userInfo.getUserInfo,
+  userInfo.getUserMatchHistory,
+  userInfo.getUserMatchDetails,
 );
+
+//router.post("/:gameName/matchList", matchListInfo);
 
 module.exports = router;

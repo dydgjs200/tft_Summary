@@ -1,13 +1,6 @@
 const axios = require("axios");
 const userService = require("./userService");
 
-exports.getAllUsers = (req, res) => {
-  res.json([
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Doe" },
-  ]);
-};
-
 // db에 유저가 있을 시 정보 리턴
 exports.findUser = async (req, res, next) => {
   console.log("Request Body:", req.body);
