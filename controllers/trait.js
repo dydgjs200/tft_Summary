@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 
 dotenv.config(); // .env 파일 로드
 
+// S3 연동
 const s3Client = new S3Client({
   region: process.env.AWS_REGION || "ap-northeast-2", // 기본값으로 ap-northeast-2 설정
   credentials: {
@@ -11,6 +12,7 @@ const s3Client = new S3Client({
   },
 });
 
+// 모든 Trait
 exports.AllTrait = async (req, res) => {
   try {
     const params = {
